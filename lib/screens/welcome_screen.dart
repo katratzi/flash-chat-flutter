@@ -24,11 +24,28 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
     animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
     controller.forward();
+    // controller.reverse(from: 1.0); // reverse but specify where to start from
+
+    animation.addStatusListener((status) {
+      print(status);
+      if (status == AnimationStatus.completed) {
+        controller.reverse(from: 1);
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
 
     controller.addListener(() {
       print(controller.value);
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    // IMPORTANT - remember to dispose of controller manually
+    controller.dispose();
+    super.dispose();
   }
 
   @override
