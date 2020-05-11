@@ -18,23 +18,29 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 2),
       vsync: this,
       // upperBound: 100 // can modify range here
     );
-    animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
-    controller.forward();
+
+    // animation = CurvedAnimation(parent: controller, curve: Curves.easeIn);
     // controller.reverse(from: 1.0); // reverse but specify where to start from
 
-    animation.addStatusListener((status) {
-      print(status);
-      if (status == AnimationStatus.completed) {
-        controller.reverse(from: 1);
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
+    // loop using status listener
+    // animation.addStatusListener((status) {
+    //   print(status);
+    //   if (status == AnimationStatus.completed) {
+    //     controller.reverse(from: 1);
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     controller.forward();
+    //   }
+    // });
 
+    // using a tween
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller);
+
+    controller.forward();
     controller.addListener(() {
       print(controller.value);
       setState(() {});
@@ -52,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.red.withOpacity(controller.value),
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -65,7 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: animation.value * 100,
+                    height: 60.0,
                   ),
                 ),
                 Text(
