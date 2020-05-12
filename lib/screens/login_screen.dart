@@ -9,6 +9,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
-                //Do something with the user input.
+                // get email
+                email = value;
               },
               decoration: Constants.kTextFieldDecoration
                   .copyWith(hintText: 'Enter your email'),
@@ -40,8 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              obscureText: true,
               onChanged: (value) {
-                //Do something with the user input.
+                // get password
+                password = value;
               },
               decoration: Constants.kTextFieldDecoration
                   .copyWith(hintText: 'Enter your password.'),
