@@ -35,11 +35,20 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-// pull from database
+  // pull from database
   void getMessages() async {
     final messages = await _firestore.collection('messages').getDocuments();
     for (var message in messages.documents) {
       print(message.data);
+    }
+  }
+
+  // push from database using the streams
+  void messagesStream() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.documents) {
+        print(message.data);
+      }
     }
   }
 
@@ -55,7 +64,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 //Implement logout functionality
                 // _auth.signOut();
                 // Navigator.pop(context);
-                getMessages();
+                // getMessages();
+                messagesStream();
               }),
         ],
         title: Text('⚡️Chat'),
