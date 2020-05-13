@@ -63,10 +63,10 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: Icon(Icons.close),
               onPressed: () {
                 //Implement logout functionality
-                // _auth.signOut();
-                // Navigator.pop(context);
-                // getMessages();
-                messagesStream();
+                _auth.signOut();
+                Navigator.pop(context);
+                // getMessages();  //debug
+                // messagesStream(); //debug
               }),
         ],
         title: Text('⚡️Chat'),
@@ -100,6 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedInUser.email,
+                        'timestamp': TimeOfDay.now().toString(), // todo
                       });
                     },
                     child: Text(
@@ -132,8 +133,8 @@ class MessageStream extends StatelessWidget {
               ),
             );
           }
-          // get the list of documents
-          final messages = snapshot.data.documents;
+          // get the list of documents - need to reverse as our list is also now reversed
+          final messages = snapshot.data.documents.reversed;
           // we'll build a bunch of text widgets to display them
           List<MessageBubble> messageWidgets = [];
           for (var message in messages) {
@@ -148,7 +149,7 @@ class MessageStream extends StatelessWidget {
           }
           return Expanded(
             child: ListView(
-              physics: const ScrollPhysics(),
+              reverse: true, // always show end
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
               children: messageWidgets,
             ),
